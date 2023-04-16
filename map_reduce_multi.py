@@ -2,8 +2,8 @@ import pandas as pd
 import multiprocessing as mp
 from functools import reduce
 
-# Map function
-def map_func(x):
+# Define Map function
+def mapper(x):
     return (x, 1)
 
 # Shuffle function
@@ -17,7 +17,7 @@ def shuffle(mapper_out):
     return data
 
 # Reduce function
-def reduce_func(x, y):
+def reducer(x, y):
     return x + y
 
 if __name__ == '__main__':
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     
     with mp.Pool(processes=mp.cpu_count()) as pool:
         # Map phase
-        map_out = pool.map(map_func, map_in, chunksize=int(len(map_in)/mp.cpu_count()))
+        map_out = pool.map(mapper, map_in, chunksize=int(len(map_in)/mp.cpu_count()))
         
         # Shuffle phase
         reduce_in = shuffle(map_out)
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         # Reduce phase
         reduce_out = {}
         for key, values in reduce_in.items():
-            reduce_out[key] = reduce(reduce_func, values)
+            reduce_out[key] = reduce(reducer, values)
         
         # Convert output to pandas dataframe and sort in descending order
         df = pd.DataFrame(list(reduce_out.items()), columns=['Passenger ID', 'Number of Flights'])
