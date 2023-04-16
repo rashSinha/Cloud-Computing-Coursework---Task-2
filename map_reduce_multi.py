@@ -2,11 +2,11 @@ import pandas as pd
 import multiprocessing as mp
 from functools import reduce
 
-# Define Map function
+# Define Mapper function
 def mapper(x):
     return (x, 1)
 
-# Shuffle function
+# Define Shuffle function
 def shuffle(mapper_out):
     data = {}
     for k, v in mapper_out:
@@ -16,7 +16,7 @@ def shuffle(mapper_out):
             data[k].append(v)
     return data
 
-# Reduce function
+# Define Reduce function
 def reducer(x, y):
     return x + y
 
