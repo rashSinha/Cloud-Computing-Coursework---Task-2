@@ -1,0 +1,12 @@
+// MapReduce for Passenger Data Analysis
+digraph {
+	input [label=Input]
+	map [label=Mapper]
+	shuffle [label=Shuffler]
+	reduce [label=Reducer]
+	output [label=Output]
+	input -> map
+	map -> shuffle
+	shuffle -> reduce
+	reduce -> output
+}
