@@ -1,6 +1,7 @@
 import pandas as pd
 import multiprocessing as mp
 from functools import reduce
+import graphviz
 
 '''Define separate templates for mapper, shuffler and reducer 
 to be called in a separate class PassengerDataAnalyzer'''
@@ -42,6 +43,18 @@ class PassengerDataAnalyzer:
         return pd.read_csv(self.input_file_path, header=None).iloc[:, 0].tolist()
         
     def analyze(self):
+        dot = graphviz.Digraph(comment='MapReduce for Passenger Data Analysis')
+        dot.node('input', 'Input')
+        dot.node('map', 'Mapper')
+        dot.node('shuffle', 'Shuffler')
+        dot.node('reduce', 'Reducer')
+        dot.node('output', 'Output')
+        
+        dot.edge('input', 'map')
+        dot.edge('map', 'shuffle')
+        dot.edge('shuffle', 'reduce')
+        dot.edge('reduce', 'output')
+
         with mp.Pool(processes=mp.cpu_count()) as pool:
             # Map phase
             map_out = pool.map(self.mapper, self.mapper.data, chunksize=int(len(self.mapper.data)/mp.cpu_count()))
@@ -63,6 +76,8 @@ class PassengerDataAnalyzer:
             
             # Save output to CSV file
             df.to_csv('output_mp.csv', index=False)
+
+        dot.render('map_reduce_flowchart.gv', view=True)
 
 if __name__ == '__main__':
     analyzer = PassengerDataAnalyzer('AComp_Passenger_data_no_error(1).csv')
