@@ -26,10 +26,12 @@ def run_sequential():
     # Save sequential output to csv file
     df_seq = pd.DataFrame(output_seq, columns=['Passenger ID', 'Number of Flights'])
     df_seq = df_seq.sort_values(by='Number of Flights', ascending=False)
-    df_seq.to_csv('output_seq.csv', index=False)
 
     # Print passenger with the highest number of flights
     print(f"Passenger ID {df_seq.iloc[0]['Passenger ID']} has travelled the most with {df_seq.iloc[0]['Number of Flights']} flights.")
+
+    df_seq.to_csv('output_seq.csv', index=False)
+
 
 if __name__ == '__main__':
     run_sequential()
